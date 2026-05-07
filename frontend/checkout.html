@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagamento VIP</title>
+
+  <style>
+    body {
+      background: #0f172a;
+      color: #fff;
+      font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 350px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      color: #22c55e;
+    }
+
+    p {
+      color: #cbd5f5;
+      font-size: 14px;
+    }
+
+    .price {
+      font-size: 28px;
+      color: #22c55e;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+    }
+
+    .secondary {
+      background: #334155;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+
+    <h1>🔐 Betnox AI Premium</h1>
+
+    <p>
+      Plataforma de análise esportiva com inteligência artificial,
+      métricas estatísticas e monitoramento automatizado.
+    </p>
+
+    <div class="price">
+      R$49,90/mês
+    </div>
+
+    <button onclick="irHotmart()">
+      💰 Assinar agora
+    </button>
+
+    <button class="secondary" onclick="jaPaguei()">
+      ✅ Já assinei
+    </button>
+
+    <p style="margin-top:15px;font-size:12px">
+      Acesso liberado após confirmação de pagamento.
+    </p>
+
+  </div>
+
+  <script>
+
+    function irHotmart() {
+      window.open(
+        "https://pay.hotmart.com/Y105732828C",
+        "_blank"
+      );
+    }
+
+    function jaPaguei() {
+
+      localStorage.setItem("vip", "true");
+
+      alert("VIP liberado com sucesso!");
+
+      window.location.href = "dashboard.html";
+    }
+
+  </script>
+
+</body>
+</html>

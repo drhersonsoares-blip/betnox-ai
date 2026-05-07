@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Betnox AI</title>
+
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>🤖 Betnox AI</h1>
+
+    <!-- 🔐 BANNER VIP -->
+    <div class="card vip-banner">
+      <h2>🔒 Área Premium</h2>
+      <p>Desbloqueie todas as apostas + gestão profissional + alertas VIP</p>
+
+      <div class="info">
+        <span>📈 ROI positivo</span>
+        <span>💰 Gestão de banca</span>
+        <span>🧠 IA avançada</span>
+      </div>
+
+      <button class="btn-vip" onclick="irParaPagamento()">
+        💰 Tornar-se VIP
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div id="stats"></div>
+
+    <!-- GRÁFICO LUCRO -->
+    <div class="card">
+      <h3>📊 Lucro acumulado</h3>
+      <canvas id="graficoLucro" height="100"></canvas>
+    </div>
+
+    <!-- GRÁFICO BANCA -->
+    <div class="card">
+      <h3>📈 Crescimento da banca</h3>
+      <canvas id="graficoBanca"></canvas>
+    </div>
+
+    <!-- LISTA -->
+    <h2>🔥 Apostas do dia</h2>
+    <div id="lista"></div>
+
+  </div>
+
+  <script>
+    function irParaPagamento() {
+      window.location.href = "checkout.html"; // 🔥 próxima etapa
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="scripts/app.js"></script>
+
+</body>
+</html>

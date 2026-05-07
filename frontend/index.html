@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Betnox AI</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles/main.css" />
+
+  <!-- Chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+  <!-- ====================== -->
+  <!-- 🔥 HERO -->
+  <!-- ====================== -->
+
+  <section class="hero">
+
+    <div class="overlay"></div>
+
+    <div class="hero-content">
+
+      <h1>
+        🤖 Betnox AI
+      </h1>
+
+      <p>
+        Inteligência artificial aplicada à análise esportiva,
+        gestão profissional e monitoramento automatizado.
+      </p>
+
+      <div class="hero-buttons">
+
+        <button onclick="irParaPagamento()" class="btn-green">
+          💰 Tornar-se VIP
+        </button>
+
+        <button onclick="scrollParaDashboard()" class="btn-dark">
+          📊 Ver plataforma
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ====================== -->
+  <!-- 📊 STATS -->
+  <!-- ====================== -->
+
+  <section class="stats-section">
+
+    <div class="container">
+
+      <div id="stats"></div>
+
+    </div>
+
+  </section>
+
+  <!-- ====================== -->
+  <!-- 📈 GRÁFICOS -->
+  <!-- ====================== -->
+
+  <section class="container graficos">
+
+    <div class="card">
+
+      <h3>📈 Lucro acumulado</h3>
+
+      <canvas id="graficoLucro"></canvas>
+
+    </div>
+
+    <div class="card">
+
+      <h3>💰 Crescimento da banca</h3>
+
+      <canvas id="graficoBanca"></canvas>
+
+    </div>
+
+  </section>
+
+  <!-- ====================== -->
+  <!-- 🔥 BENEFÍCIOS -->
+  <!-- ====================== -->
+
+  <section class="beneficios">
+
+    <div class="container">
+
+      <h2>🚀 Plataforma Profissional</h2>
+
+      <div class="beneficios-grid">
+
+        <div class="card">
+          <h3>🤖 IA Inteligente</h3>
+          <p>
+            Algoritmos avançados para análise esportiva.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>📊 Estatísticas</h3>
+          <p>
+            ROI, winrate e métricas em tempo real.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>💰 Gestão</h3>
+          <p>
+            Controle de stake e crescimento de banca.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>🔐 VIP</h3>
+          <p>
+            Acesso às análises premium e sinais exclusivos.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ====================== -->
+  <!-- 🔥 DASHBOARD -->
+  <!-- ====================== -->
+
+  <section class="dashboard-section">
+
+    <div class="container">
+
+      <h2>
+        🔥 Oportunidades do Dia
+      </h2>
+
+      <div id="lista"></div>
+
+    </div>
+
+  </section>
+
+  <!-- ====================== -->
+  <!-- 🔥 CTA FINAL -->
+  <!-- ====================== -->
+
+  <section class="cta-final">
+
+    <div class="container">
+
+      <h2>
+        🔐 Entre para o Betnox AI Premium
+      </h2>
+
+      <p>
+        Acompanhe análises automatizadas, métricas e
+        insights esportivos em tempo real.
+      </p>
+
+      <button onclick="irParaPagamento()" class="btn-green big">
+        🚀 Assinar Agora
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- ====================== -->
+  <!-- FOOTER -->
+  <!-- ====================== -->
+
+  <footer>
+
+    <p>
+      © 2026 Betnox AI — Plataforma de análise esportiva com IA.
+    </p>
+
+  </footer>
+
+  <!-- APP -->
+  <script src="scripts/app.js"></script>
+
+  <!-- HELPERS -->
+  <script>
+
+    function scrollParaDashboard() {
+
+      window.scrollTo({
+        top: 900,
+        behavior: "smooth"
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

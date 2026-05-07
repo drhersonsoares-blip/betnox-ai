@@ -1,0 +1,14 @@
+[
+  {
+    "timeCasa": "Arsenal",
+    "timeFora": "Chelsea",
+    "evCasa": "0.25",
+    "resultado": "win"
+  },
+  {
+    "timeCasa": "Barcelona",
+    "timeFora": "Real Madrid",
+    "evCasa": "-0.10",
+    "resultado": "loss"
+  }
+]
