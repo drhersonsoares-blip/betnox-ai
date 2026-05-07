@@ -3,7 +3,13 @@
 // ======================
 
 let usuarioVIP = false;
-let emailUsuario = localStorage.getItem("email") || null;
+
+let emailUsuario =
+  localStorage.getItem("email") || null;
+
+// 🌐 API ONLINE
+const API_URL =
+  "https://betnox-ai-production.up.railway.app";
 
 // ======================
 // 🚀 LOAD
@@ -21,7 +27,7 @@ window.onload = async function () {
   carregarStats();
   carregarTop();
 
-  // 🔄 atualização
+  // 🔄 atualização automática
   setInterval(carregarTop, 15000);
 };
 
@@ -59,12 +65,14 @@ async function verificarVIP() {
     if (!emailUsuario) return;
 
     const res = await fetch(
-      "http://localhost:3000/auth/login",
+      `${API_URL}/auth/login`,
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify({
           email: emailUsuario
         })
@@ -94,7 +102,7 @@ async function carregarTop() {
   try {
 
     const res = await fetch(
-      "http://localhost:3000/top"
+      `${API_URL}/top`
     );
 
     const dados = await res.json();
@@ -139,7 +147,7 @@ async function carregarTop() {
 
       div.className = "card";
 
-      // 🔥 nível visual
+      // 🔥 brilho baseado confiança
       let glow = "#334155";
 
       if (parseFloat(jogo.evCasa) > 0.25) {
@@ -332,7 +340,7 @@ async function carregarTop() {
         </h3>
 
         <p style="margin-top:10px">
-          Verifique se o servidor está rodando
+          Verifique se o backend está online
         </p>
 
       </div>
@@ -346,9 +354,8 @@ async function carregarTop() {
 
 async function entrarVIP() {
 
-  const email = document
-    .getElementById("emailVIP")
-    .value;
+  const email =
+    document.getElementById("emailVIP").value;
 
   if (!email) {
 
@@ -408,7 +415,7 @@ async function carregarStats() {
   try {
 
     const res = await fetch(
-      "http://localhost:3000/stats"
+      `${API_URL}/stats`
     );
 
     const s = await res.json();
@@ -478,7 +485,7 @@ async function carregarStats() {
 async function carregarGrafico() {
 
   const res = await fetch(
-    "http://localhost:3000/grafico"
+    `${API_URL}/grafico`
   );
 
   const dados = await res.json();
@@ -490,9 +497,7 @@ async function carregarGrafico() {
     dados.map(d => d.lucro);
 
   const ctx =
-    document.getElementById(
-      "graficoLucro"
-    );
+    document.getElementById("graficoLucro");
 
   new Chart(ctx, {
 
@@ -510,7 +515,7 @@ async function carregarGrafico() {
 
         borderWidth: 3,
 
-        tension: 0.4,
+        tension: 0.4
 
       }]
     }
@@ -524,7 +529,7 @@ async function carregarGrafico() {
 async function carregarBanca() {
 
   const res = await fetch(
-    "http://localhost:3000/banca"
+    `${API_URL}/banca`
   );
 
   const dados = await res.json();
@@ -536,9 +541,7 @@ async function carregarBanca() {
     dados.map(d => d.banca);
 
   const ctx =
-    document.getElementById(
-      "graficoBanca"
-    );
+    document.getElementById("graficoBanca");
 
   new Chart(ctx, {
 
