@@ -10,62 +10,112 @@ const app = express();
 // ======================
 
 app.use(cors());
+
 app.use(express.json());
 
 // ======================
 // 📂 ROTAS
 // ======================
 
-// jogos
-const jogosRoutes = require("./routes/jogos");
-app.use("/jogos", jogosRoutes);
+// 🎮 jogos
+const jogosRoutes =
+  require("./routes/jogos");
 
-// top apostas
-const topRoutes = require("./routes/top");
-app.use("/top", topRoutes);
+app.use(
+  "/jogos",
+  jogosRoutes
+);
 
-// stats
-const statsRoutes = require("./routes/stats");
-app.use("/stats", statsRoutes);
+// 🔥 top apostas
+const topRoutes =
+  require("./routes/top");
 
-// banca
-const bancaRoutes = require("./routes/banca");
-app.use("/banca", bancaRoutes);
+app.use(
+  "/top",
+  topRoutes
+);
 
-// histórico
-const historicoRoutes = require("./routes/historico");
-app.use("/historico", historicoRoutes);
+// 📊 stats
+const statsRoutes =
+  require("./routes/stats");
 
-// gráfico
-const graficoRoutes = require("./routes/grafico");
-app.use("/grafico", graficoRoutes);
+app.use(
+  "/stats",
+  statsRoutes
+);
+
+// 💰 banca
+const bancaRoutes =
+  require("./routes/banca");
+
+app.use(
+  "/banca",
+  bancaRoutes
+);
+
+// 📜 histórico
+const historicoRoutes =
+  require("./routes/historico");
+
+app.use(
+  "/historico",
+  historicoRoutes
+);
+
+// 📈 gráfico
+const graficoRoutes =
+  require("./routes/grafico");
+
+app.use(
+  "/grafico",
+  graficoRoutes
+);
 
 // ======================
-// 🔐 NOVAS ROTAS VIP
+// 🔐 VIP
 // ======================
 
-// webhook hotmart
-const webhookRoutes = require("./routes/webhook");
-app.use("/webhook", webhookRoutes);
+// 🔥 webhook hotmart
+const webhookRoutes =
+  require("./routes/webhook");
 
-// autenticação
-const authRoutes = require("./routes/auth");
-app.use("/auth", authRoutes);
+app.use(
+  "/webhook",
+  webhookRoutes
+);
+
+// 🔐 autenticação
+const authRoutes =
+  require("./routes/authRoutes");
+
+app.use(
+  "/auth",
+  authRoutes
+);
 
 // ======================
-// 🚀 ROTA TESTE
+// 🚀 TESTE
 // ======================
 
 app.get("/", (req, res) => {
-  res.send("🚀 BetLab AI rodando");
+
+  res.send(
+    "🚀 BetLab AI rodando"
+  );
 });
 
 // ======================
 // 🚀 SERVIDOR
 // ======================
 
-app.listen(3000, () => {
-  console.log("Servidor rodando na porta 3000");
+const PORT =
+  process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+
+  console.log(
+    `🚀 Servidor rodando na porta ${PORT}`
+  );
 });
 
 // ======================

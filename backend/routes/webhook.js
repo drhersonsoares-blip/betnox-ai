@@ -1,7 +1,9 @@
 const express = require("express");
+
 const router = express.Router();
 
 const fs = require("fs");
+
 const path = require("path");
 
 // ======================
@@ -10,7 +12,7 @@ const path = require("path");
 
 const caminhoUsers = path.join(
   __dirname,
-  "../../database/users.json"
+  "../database/users.json"
 );
 
 // ======================
@@ -21,7 +23,10 @@ router.post("/", (req, res) => {
 
   try {
 
-    console.log("🔥 Webhook recebido:");
+    console.log(
+      "🔥 Webhook recebido:"
+    );
+
     console.log(req.body);
 
     // ======================
@@ -29,40 +34,71 @@ router.post("/", (req, res) => {
     // ======================
 
     const email =
+
       req.body?.data?.buyer?.email ||
+
       req.body?.buyer?.email;
 
     const status =
+
       req.body?.data?.purchase?.status ||
+
       req.body?.purchase?.status;
 
     // ======================
-    // ✅ PAGAMENTO APROVADO
+    // 🔥 SEGURANÇA
+    // ======================
+
+    if (!email) {
+
+      console.log(
+        "⚠️ Email não encontrado"
+      );
+
+      return res.sendStatus(200);
+    }
+
+    // ======================
+    // 📂 CRIAR USERS
     // ======================
 
     if (
+      !fs.existsSync(caminhoUsers)
+    ) {
+
+      fs.writeFileSync(
+        caminhoUsers,
+        JSON.stringify([])
+      );
+    }
+
+    // ======================
+    // 📂 LER USERS
+    // ======================
+
+    let users = JSON.parse(
+
+      fs.readFileSync(caminhoUsers)
+    );
+
+    // ======================
+    // ✅ APROVADO
+    // ======================
+
+    if (
+
       status === "APPROVED" ||
+
       status === "approved"
     ) {
 
-      // ======================
-      // 📂 LER USERS
-      // ======================
-
-      let users = [];
-
-      if (fs.existsSync(caminhoUsers)) {
-        users = JSON.parse(
-          fs.readFileSync(caminhoUsers)
-        );
-      }
-
-      // ======================
-      // 🔎 VERIFICA EXISTE
-      // ======================
-
       const jaExiste = users.find(
-        u => u.email === email
+
+        u =>
+
+          u.email.toLowerCase() ===
+
+          email.toLowerCase()
       );
 
       // ======================
@@ -72,27 +108,85 @@ router.post("/", (req, res) => {
       if (!jaExiste) {
 
         users.push({
+
           email,
+
           vip: true,
-          criadoEm: new Date()
+
+          criadoEm:
+            new Date()
         });
 
       } else {
 
-        // 🔥 atualiza vip
         jaExiste.vip = true;
+
+        jaExiste.atualizadoEm =
+          new Date();
       }
 
       // ======================
-      // 💾 SALVA
+      // 💾 SALVAR
       // ======================
 
       fs.writeFileSync(
+
         caminhoUsers,
-        JSON.stringify(users, null, 2)
+
+        JSON.stringify(
+          users,
+          null,
+          2
+        )
       );
 
-      console.log("✅ VIP liberado:", email);
+      console.log(
+        "✅ VIP liberado:",
+        email
+      );
+    }
+
+    // ======================
+    // ❌ CANCELADO
+    // ======================
+
+    if (
+
+      status === "CANCELLED" ||
+
+      status === "REFUNDED"
+    ) {
+
+      users = users.map(user => {
+
+        if (
+
+          user.email.toLowerCase() ===
+
+          email.toLowerCase()
+        ) {
+
+          user.vip = false;
+        }
+
+        return user;
+      });
+
+      fs.writeFileSync(
+
+        caminhoUsers,
+
+        JSON.stringify(
+          users,
+          null,
+          2
+        )
+      );
+
+      console.log(
+        "❌ VIP removido:",
+        email
+      );
     }
 
     // ======================
@@ -103,7 +197,10 @@ router.post("/", (req, res) => {
 
   } catch (e) {
 
-    console.log("❌ Erro webhook:", e.message);
+    console.log(
+      "❌ Erro webhook:",
+      e.message
+    );
 
     res.sendStatus(500);
   }
