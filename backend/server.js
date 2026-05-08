@@ -5,17 +5,17 @@ const cors = require("cors");
 
 const app = express();
 
-// ======================
-// 🔥 CONFIG
-// ======================
+// =====================================================
+// 🚀 CONFIG
+// =====================================================
 
 app.use(cors());
 
 app.use(express.json());
 
-// ======================
-// 📂 ROTAS
-// ======================
+// =====================================================
+// 📂 ROTAS PRINCIPAIS
+// =====================================================
 
 // 🎮 jogos
 const jogosRoutes =
@@ -35,7 +35,7 @@ app.use(
   topRoutes
 );
 
-// 📊 stats
+// 📊 estatísticas
 const statsRoutes =
   require("./routes/stats");
 
@@ -71,9 +71,9 @@ app.use(
   graficoRoutes
 );
 
-// ======================
-// 🔐 VIP
-// ======================
+// =====================================================
+// 🔐 VIP / AUTENTICAÇÃO
+// =====================================================
 
 // 🔥 webhook hotmart
 const webhookRoutes =
@@ -84,7 +84,7 @@ app.use(
   webhookRoutes
 );
 
-// 🔐 autenticação
+// 🔐 login
 const authRoutes =
   require("./routes/authRoutes");
 
@@ -93,33 +93,58 @@ app.use(
   authRoutes
 );
 
-// ======================
-// 🚀 TESTE
-// ======================
+// =====================================================
+// 📊 ADMIN PREMIUM
+// =====================================================
+
+// 🚀 admin
+const adminRoutes =
+  require("./routes/adminRoutes");
+
+app.use(
+  "/admin",
+  adminRoutes
+);
+
+// =====================================================
+// ❤️ HEALTH CHECK
+// =====================================================
 
 app.get("/", (req, res) => {
 
-  res.send(
-    "🚀 BetLab AI rodando"
-  );
+  res.send({
+    status: "online",
+    plataforma: "BETNOX AI",
+    servidor: "rodando",
+    versao: "1.0.0"
+  });
+
 });
 
-// ======================
+// =====================================================
 // 🚀 SERVIDOR
-// ======================
+// =====================================================
 
 const PORT =
   process.env.PORT || 3000;
 
 app.listen(PORT, () => {
 
-  console.log(
-    `🚀 Servidor rodando na porta ${PORT}`
-  );
+  console.log(`
+========================================
+🚀 BETNOX AI ONLINE
+========================================
+🔥 Porta: ${PORT}
+📊 Admin: /admin
+🔐 Auth: /auth
+⚡ Ambiente: ${process.env.NODE_ENV || "development"}
+========================================
+  `);
+
 });
 
-// ======================
-// ⏰ CRON
-// ======================
+// =====================================================
+// ⏰ CRON AUTOMÁTICO
+// =====================================================
 
 require("./cron");
