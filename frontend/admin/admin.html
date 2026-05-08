@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Betnox AI Admin
+  </title>
+
+  <!-- CSS PRINCIPAL -->
+  <link
+    rel="stylesheet"
+    href="../styles/main.css"
+  >
+
+  <!-- CSS ADMIN -->
+  <link
+    rel="stylesheet"
+    href="./admin.css"
+  >
+
+</head>
+
+<body>
+
+  <!-- ===================================== -->
+  <!-- 🚀 ADMIN LAYOUT -->
+  <!-- ===================================== -->
+
+  <div class="admin-layout">
+
+    <!-- ===================================== -->
+    <!-- 📊 SIDEBAR -->
+    <!-- ===================================== -->
+
+    <aside class="sidebar">
+
+      <!-- LOGO -->
+
+      <div class="sidebar-logo">
+
+        <h2>
+          🤖 BETNOX
+        </h2>
+
+        <p>
+          ADMIN AI
+        </p>
+
+      </div>
+
+      <!-- MENU -->
+
+      <nav class="sidebar-menu">
+
+        <button class="menu-item active">
+          📊 Dashboard
+        </button>
+
+        <button class="menu-item">
+          👥 Usuários
+        </button>
+
+        <button class="menu-item">
+          💰 Receita
+        </button>
+
+        <button class="menu-item">
+          🤖 IA
+        </button>
+
+        <button class="menu-item">
+          📡 Telegram
+        </button>
+
+        <button class="menu-item">
+          📜 Logs
+        </button>
+
+        <button class="menu-item">
+          ⚙ Config
+        </button>
+
+      </nav>
+
+    </aside>
+
+    <!-- ===================================== -->
+    <!-- 🚀 MAIN -->
+    <!-- ===================================== -->
+
+    <main class="admin-main">
+
+      <!-- ===================================== -->
+      <!-- 🔥 TOPBAR -->
+      <!-- ===================================== -->
+
+      <header class="topbar">
+
+        <div>
+
+          <h1>
+            📊 Betnox Admin
+          </h1>
+
+          <p class="subtitle">
+            Painel administrativo premium
+          </p>
+
+        </div>
+
+        <div style="
+          display:flex;
+          align-items:center;
+          gap:15px;
+          flex-wrap:wrap;
+        ">
+
+          <div class="status-online">
+
+            <span class="dot"></span>
+
+            SISTEMA ONLINE
+
+          </div>
+
+          <button class="btn-dark">
+            🚪 Logout
+          </button>
+
+        </div>
+
+      </header>
+
+      <!-- ===================================== -->
+      <!-- 🚀 CONTAINER -->
+      <!-- ===================================== -->
+
+      <div class="container">
+
+        <!-- ===================================== -->
+        <!-- 💎 HERO -->
+        <!-- ===================================== -->
+
+        <div class="hero-card">
+
+          <div class="hero-glow"></div>
+
+          <div class="hero-content">
+
+            <div>
+
+              <div class="badge-premium">
+                🚀 ADMIN CONTROL
+              </div>
+
+              <h2>
+                Monitoramento inteligente
+                da plataforma Betnox AI
+              </h2>
+
+              <p>
+
+                Controle usuários,
+                receita,
+                IA esportiva,
+                sinais,
+                Telegram
+                e analytics da operação.
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- 📊 MÉTRICAS -->
+        <!-- ===================================== -->
+
+        <div class="metrics-grid">
+
+          <div class="metric-card">
+
+            <h3 id="usuarios">
+              0
+            </h3>
+
+            <p>
+              Usuários
+            </p>
+
+          </div>
+
+          <div class="metric-card">
+
+            <h3 id="vips">
+              0
+            </h3>
+
+            <p>
+              VIPs
+            </p>
+
+          </div>
+
+          <div class="metric-card">
+
+            <h3 id="receita">
+              R$0
+            </h3>
+
+            <p>
+              Receita estimada
+            </p>
+
+          </div>
+
+          <div class="metric-card">
+
+            <h3 id="sinais">
+              0
+            </h3>
+
+            <p>
+              Sinais IA
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- 📈 GRÁFICOS -->
+        <!-- ===================================== -->
+
+        <div class="charts-grid">
+
+          <!-- gráfico -->
+
+          <div class="card">
+
+            <div class="section-header">
+
+              <h3>
+                📈 Crescimento
+              </h3>
+
+              <div class="mini-status">
+                Atualização em tempo real
+              </div>
+
+            </div>
+
+            <canvas id="graficoAdmin"></canvas>
+
+          </div>
+
+          <!-- status ia -->
+
+          <div class="card">
+
+            <div class="section-header">
+
+              <h3>
+                🤖 Status IA
+              </h3>
+
+              <div class="mini-status">
+                ONLINE
+              </div>
+
+            </div>
+
+            <div id="statusIA"></div>
+
+          </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- 👥 USUÁRIOS -->
+        <!-- ===================================== -->
+
+        <div class="card">
+
+          <div class="section-header">
+
+            <h2>
+              👥 Usuários Recentes
+            </h2>
+
+            <div class="mini-status">
+              ADMIN ACCESS
+            </div>
+
+          </div>
+
+          <div class="table-wrapper">
+
+            <table class="admin-table">
+
+              <thead>
+
+                <tr>
+
+                  <th>Email</th>
+
+                  <th>Status</th>
+
+                  <th>Plano</th>
+
+                  <th>Último acesso</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody id="usuariosTabela">
+
+                <tr>
+
+                  <td>
+                    demo@betnox.ai
+                  </td>
+
+                  <td>
+                    <span class="badge-status online">
+                      Online
+                    </span>
+                  </td>
+
+                  <td>
+                    <span class="badge-vip">
+                      VIP
+                    </span>
+                  </td>
+
+                  <td>
+                    Agora
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- 📡 MONITOR -->
+        <!-- ===================================== -->
+
+        <div class="metrics-grid">
+
+          <div class="metric-card">
+
+            <h3>
+              ✅
+            </h3>
+
+            <p>
+              Backend Online
+            </p>
+
+          </div>
+
+          <div class="metric-card">
+
+            <h3>
+              🤖
+            </h3>
+
+            <p>
+              IA Operacional
+            </p>
+
+          </div>
+
+          <div class="metric-card">
+
+            <h3>
+              📡
+            </h3>
+
+            <p>
+              Telegram Ativo
+            </p>
+
+          </div>
+
+          <div class="metric-card">
+
+            <h3>
+              🔥
+            </h3>
+
+            <p>
+              Cron Rodando
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- CHART -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- JS -->
+  <script src="./admin.js"></script>
+
+</body>
+</html>

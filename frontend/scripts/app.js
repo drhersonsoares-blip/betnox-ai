@@ -12,6 +12,13 @@ const API_URL =
   "https://betnox-ai-production.up.railway.app";
 
 // ======================
+// 🔐 ADMIN
+// ======================
+
+const isAdmin =
+  localStorage.getItem("admin");
+
+// ======================
 // 🚀 LOAD
 // ======================
 
@@ -29,6 +36,24 @@ window.onload = async function () {
       "login/login.html";
 
     return;
+  }
+
+  // ======================
+  // 🔥 ADMIN BTN
+  // ======================
+
+  if (isAdmin === "true") {
+
+    const adminBtn =
+      document.getElementById(
+        "adminBtn"
+      );
+
+    if (adminBtn) {
+
+      adminBtn.style.display =
+        "block";
+    }
   }
 
   // 🔥 verifica VIP
@@ -298,6 +323,16 @@ function irParaPagamento() {
 }
 
 // ======================
+// 📊 ADMIN
+// ======================
+
+function irParaAdmin() {
+
+  window.location.href =
+    "admin/admin.html";
+}
+
+// ======================
 // 📊 STATS
 // ======================
 
@@ -463,14 +498,22 @@ async function carregarBanca() {
 
 function logout() {
 
+  // 🔐 VIP
   localStorage.removeItem(
     "vip"
   );
 
+  // 📩 EMAIL
   localStorage.removeItem(
     "email"
   );
 
+  // 🔐 ADMIN
+  localStorage.removeItem(
+    "admin"
+  );
+
+  // 🚀 REDIRECT
   window.location.href =
     "login/login.html";
 }

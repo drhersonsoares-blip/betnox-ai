@@ -1,6 +1,17 @@
 const API_URL =
   "https://betnox-ai-production.up.railway.app";
 
+// ==========================================
+// 🔐 ADMINS
+// ==========================================
+
+const adminEmails = [
+
+  "SEUEMAIL@gmail.com",
+  "admin@betnox.ai"
+
+];
+
 // ======================
 // 🔐 LOGIN
 // ======================
@@ -18,8 +29,14 @@ async function fazerLogin() {
 
   msg.innerHTML = "";
 
-  // 🔥 validação
+  // ==========================================
+  // 🔥 VALIDAÇÃO
+  // ==========================================
+
   if (!email) {
+
+    msg.style.color =
+      "#f87171";
 
     msg.innerHTML =
       "Digite seu email.";
@@ -28,6 +45,9 @@ async function fazerLogin() {
   }
 
   try {
+
+    msg.style.color =
+      "#cbd5f5";
 
     msg.innerHTML =
       "⏳ Verificando acesso...";
@@ -54,11 +74,15 @@ async function fazerLogin() {
     const data =
       await res.json();
 
-    // ======================
-    // ✅ VIP
-    // ======================
+    // ==========================================
+    // ✅ VIP LIBERADO
+    // ==========================================
 
     if (data.vip) {
+
+      // ==========================================
+      // 💾 STORAGE
+      // ==========================================
 
       localStorage.setItem(
         "vip",
@@ -70,14 +94,44 @@ async function fazerLogin() {
         email
       );
 
+      // ==========================================
+      // 🔥 ADMIN
+      // ==========================================
+
+      const isAdmin =
+        adminEmails.includes(email);
+
+      localStorage.setItem(
+        "admin",
+        isAdmin
+      );
+
+      // ==========================================
+      // ✅ MSG
+      // ==========================================
+
       msg.style.color =
         "#22c55e";
 
       msg.innerHTML =
         "✅ Acesso liberado!";
 
+      // ==========================================
+      // 🚀 REDIRECT
+      // ==========================================
+
       setTimeout(() => {
 
+        // 🔐 ADMIN
+        if (isAdmin) {
+
+          window.location.href =
+            "../admin/admin.html";
+
+          return;
+        }
+
+        // 👤 USER NORMAL
         window.location.href =
           "../dashboard.html";
 
@@ -86,9 +140,9 @@ async function fazerLogin() {
       return;
     }
 
-    // ======================
+    // ==========================================
     // ❌ NÃO VIP
-    // ======================
+    // ==========================================
 
     msg.style.color =
       "#f87171";

@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "email": "vip@betnox.ai",
+    "plano": "VIP",
+    "status": "online",
+    "ultimoAcesso": "Agora"
+  },
+  {
+    "email": "usuario1@gmail.com",
+    "plano": "FREE",
+    "status": "offline",
+    "ultimoAcesso": "2 horas atrás"
+  },
+  {
+    "email": "premium@gmail.com",
+    "plano": "VIP",
+    "status": "online",
+    "ultimoAcesso": "5 minutos atrás"
+  }
+]

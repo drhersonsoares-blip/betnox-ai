@@ -56,6 +56,17 @@
 
       </div>
 
+      <!-- ADMIN -->
+
+      <button
+        id="adminBtn"
+        class="btn-dark"
+        style="display:none;"
+        onclick="irParaAdmin()"
+      >
+        📊 Admin
+      </button>
+
       <!-- EMAIL -->
 
       <div
@@ -249,16 +260,36 @@
 
   <script>
 
+    // ==========================================
+    // 💰 CHECKOUT
+    // ==========================================
+
     function irParaPagamento() {
 
       window.location.href =
         "checkout.html";
     }
 
-    // 🔥 MOSTRA EMAIL
+    // ==========================================
+    // 📊 ADMIN
+    // ==========================================
+
+    function irParaAdmin() {
+
+      window.location.href =
+        "admin/admin.html";
+    }
+
+    // ==========================================
+    // 🔐 EMAIL
+    // ==========================================
 
     const email =
       localStorage.getItem("email");
+
+    // ==========================================
+    // 👤 MOSTRAR EMAIL
+    // ==========================================
 
     if (email) {
 
@@ -269,6 +300,20 @@
 
       box.innerHTML =
         `💎 ${email}`;
+    }
+
+    // ==========================================
+    // 🔥 ADMIN BTN
+    // ==========================================
+
+    const isAdmin =
+      localStorage.getItem("admin");
+
+    if (isAdmin === "true") {
+
+      document.getElementById(
+        "adminBtn"
+      ).style.display = "block";
     }
 
   </script>

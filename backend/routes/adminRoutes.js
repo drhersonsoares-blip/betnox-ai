@@ -1,3 +1,6 @@
+const adminMiddleware =
+  require("../middleware/adminMiddleware");
+
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -55,152 +58,180 @@ function readJson(filePath) {
 // 📊 STATS GERAIS
 // =====================================================
 
-router.get("/stats", (req, res) => {
+router.get(
+  "/stats",
+  adminMiddleware,
+  (req, res) => {
 
-  const users =
-    readJson(usersPath);
+    const users =
+      readJson(usersPath);
 
-  const vips =
-    readJson(vipsPath);
+    const vips =
+      readJson(vipsPath);
 
-  const historico =
-    readJson(historicoPath);
+    const historico =
+      readJson(historicoPath);
 
-  const stats = {
+    const stats = {
 
-    usuarios: users.length,
+      usuarios: users.length,
 
-    vips: vips.length,
+      vips: vips.length,
 
-    free:
-      users.length - vips.length,
+      free:
+        users.length - vips.length,
 
-    sinaisGerados:
-      historico.length,
+      sinaisGerados:
+        historico.length,
 
-    receitaEstimada:
-      vips.length * 97,
+      receitaEstimada:
+        vips.length * 97,
 
-    plataforma: "online",
+      plataforma: "online",
 
-    ia: "ativa",
+      ia: "ativa",
 
-    timestamp:
-      new Date()
-  };
+      timestamp:
+        new Date()
+    };
 
-  res.json(stats);
-});
+    res.json(stats);
+  }
+);
 
 // =====================================================
 // 👥 USUÁRIOS
 // =====================================================
 
-router.get("/users", (req, res) => {
+router.get(
+  "/users",
+  adminMiddleware,
+  (req, res) => {
 
-  const users =
-    readJson(usersPath);
+    const users =
+      readJson(usersPath);
 
-  res.json(users);
-});
+    res.json(users);
+  }
+);
 
 // =====================================================
 // 🔐 VIPS
 // =====================================================
 
-router.get("/vips", (req, res) => {
+router.get(
+  "/vips",
+  adminMiddleware,
+  (req, res) => {
 
-  const vips =
-    readJson(vipsPath);
+    const vips =
+      readJson(vipsPath);
 
-  res.json(vips);
-});
+    res.json(vips);
+  }
+);
 
 // =====================================================
 // 📜 HISTÓRICO
 // =====================================================
 
-router.get("/historico", (req, res) => {
+router.get(
+  "/historico",
+  adminMiddleware,
+  (req, res) => {
 
-  const historico =
-    readJson(historicoPath);
+    const historico =
+      readJson(historicoPath);
 
-  res.json(historico);
-});
+    res.json(historico);
+  }
+);
 
 // =====================================================
 // ❤️ STATUS IA
 // =====================================================
 
-router.get("/ia-status", (req, res) => {
+router.get(
+  "/ia-status",
+  adminMiddleware,
+  (req, res) => {
 
-  res.json({
+    res.json({
 
-    status: "online",
+      status: "online",
 
-    cron: "ativo",
+      cron: "ativo",
 
-    analise: "rodando",
+      analise: "rodando",
 
-    timestamp:
-      new Date()
+      timestamp:
+        new Date()
 
-  });
-});
+    });
+  }
+);
 
 // =====================================================
 // 💰 RECEITA
 // =====================================================
 
-router.get("/receita", (req, res) => {
+router.get(
+  "/receita",
+  adminMiddleware,
+  (req, res) => {
 
-  const vips =
-    readJson(vipsPath);
+    const vips =
+      readJson(vipsPath);
 
-  const receitaMensal =
-    vips.length * 97;
+    const receitaMensal =
+      vips.length * 97;
 
-  const receitaAnual =
-    receitaMensal * 12;
+    const receitaAnual =
+      receitaMensal * 12;
 
-  res.json({
+    res.json({
 
-    vipAtivos:
-      vips.length,
+      vipAtivos:
+        vips.length,
 
-    mensal:
-      receitaMensal,
+      mensal:
+        receitaMensal,
 
-    anual:
-      receitaAnual,
+      anual:
+        receitaAnual,
 
-    moeda: "BRL"
+      moeda: "BRL"
 
-  });
-});
+    });
+  }
+);
 
 // =====================================================
 // 🚀 HEALTH
 // =====================================================
 
-router.get("/health", (req, res) => {
+router.get(
+  "/health",
+  adminMiddleware,
+  (req, res) => {
 
-  res.json({
+    res.json({
 
-    status: "online",
+      status: "online",
 
-    backend: true,
+      backend: true,
 
-    api: true,
+      api: true,
 
-    telegram: true,
+      telegram: true,
 
-    cron: true,
+      cron: true,
 
-    timestamp:
-      new Date()
+      timestamp:
+        new Date()
 
-  });
-});
+    });
+  }
+);
 
 module.exports = router;

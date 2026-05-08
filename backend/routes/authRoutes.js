@@ -7,7 +7,7 @@ const fs = require("fs");
 const path = require("path");
 
 // ======================
-// 📂 BANCO VIP
+// 📂 PATHS
 // ======================
 
 const caminhoVIP =
@@ -15,6 +15,57 @@ const caminhoVIP =
     __dirname,
     "../database/vips.json"
   );
+
+const caminhoUsers =
+  path.join(
+    __dirname,
+    "../database/users.json"
+  );
+
+// ======================
+// 🔥 HELPERS
+// ======================
+
+function criarArquivoSeNaoExistir(
+  caminho
+) {
+
+  if (!fs.existsSync(caminho)) {
+
+    fs.writeFileSync(
+      caminho,
+      JSON.stringify([], null, 2)
+    );
+  }
+}
+
+function lerJSON(caminho) {
+
+  criarArquivoSeNaoExistir(
+    caminho
+  );
+
+  return JSON.parse(
+    fs.readFileSync(
+      caminho,
+      "utf-8"
+    )
+  );
+}
+
+function salvarJSON(caminho, dados) {
+
+  fs.writeFileSync(
+
+    caminho,
+
+    JSON.stringify(
+      dados,
+      null,
+      2
+    )
+  );
+}
 
 // ======================
 // 🔐 LOGIN VIP
@@ -26,39 +77,107 @@ router.post("/login", (req, res) => {
 
     const { email } = req.body;
 
-    // 🔥 segurança
+    // ==========================================
+    // ❌ EMAIL OBRIGATÓRIO
+    // ==========================================
+
     if (!email) {
 
       return res.status(400).json({
 
         erro:
           "Email obrigatório"
+
       });
     }
 
-    // 🔥 cria arquivo se não existir
-    if (
-      !fs.existsSync(caminhoVIP)
-    ) {
-
-      fs.writeFileSync(
-        caminhoVIP,
-        JSON.stringify([])
-      );
-    }
+    // ==========================================
+    // 📂 DATABASE
+    // ==========================================
 
     const vips =
-      JSON.parse(
-        fs.readFileSync(caminhoVIP)
-      );
+      lerJSON(caminhoVIP);
 
-    // 🔥 verifica VIP
+    const users =
+      lerJSON(caminhoUsers);
+
+    // ==========================================
+    // 🔐 VIP
+    // ==========================================
+
     const usuarioVIP =
       vips.find(
+
         v =>
+
           v.email.toLowerCase() ===
           email.toLowerCase()
       );
+
+    // ==========================================
+    // 👤 REGISTRAR USER
+    // ==========================================
+
+    const usuarioExiste =
+      users.find(
+
+        u =>
+
+          u.email.toLowerCase() ===
+          email.toLowerCase()
+      );
+
+    // ==========================================
+    // ➕ NOVO USUÁRIO
+    // ==========================================
+
+    if (!usuarioExiste) {
+
+      users.push({
+
+        email,
+
+        plano:
+          usuarioVIP ? "VIP" : "FREE",
+
+        status: "online",
+
+        ultimoAcesso:
+          "Agora",
+
+        criadoEm:
+          new Date()
+
+      });
+
+    } else {
+
+      // ==========================================
+      // 🔄 UPDATE USER
+      // ==========================================
+
+      usuarioExiste.status =
+        "online";
+
+      usuarioExiste.ultimoAcesso =
+        "Agora";
+
+      usuarioExiste.plano =
+        usuarioVIP ? "VIP" : "FREE";
+    }
+
+    // ==========================================
+    // 💾 SALVAR USERS
+    // ==========================================
+
+    salvarJSON(
+      caminhoUsers,
+      users
+    );
+
+    // ==========================================
+    // ✅ VIP
+    // ==========================================
 
     if (usuarioVIP) {
 
@@ -67,8 +186,13 @@ router.post("/login", (req, res) => {
         vip: true,
 
         email
+
       });
     }
+
+    // ==========================================
+    // ❌ NÃO VIP
+    // ==========================================
 
     return res.json({
 
@@ -93,16 +217,16 @@ router.post("/login", (req, res) => {
 // ======================
 // ➕ ADICIONAR VIP
 // ======================
-//
-// temporário
-// depois Hotmart fará isso
-//
 
 router.post("/add-vip", (req, res) => {
 
   try {
 
     const { email } = req.body;
+
+    // ==========================================
+    // ❌ EMAIL
+    // ==========================================
 
     if (!email) {
 
@@ -113,30 +237,34 @@ router.post("/add-vip", (req, res) => {
       });
     }
 
-    if (
-      !fs.existsSync(caminhoVIP)
-    ) {
-
-      fs.writeFileSync(
-        caminhoVIP,
-        JSON.stringify([])
-      );
-    }
+    // ==========================================
+    // 📂 DATABASE
+    // ==========================================
 
     const vips =
-      JSON.parse(
-        fs.readFileSync(caminhoVIP)
-      );
+      lerJSON(caminhoVIP);
 
-    // 🔥 evita duplicado
-    const existe =
+    const users =
+      lerJSON(caminhoUsers);
+
+    // ==========================================
+    // 🔥 VIP EXISTE
+    // ==========================================
+
+    const existeVIP =
       vips.find(
+
         v =>
+
           v.email.toLowerCase() ===
           email.toLowerCase()
       );
 
-    if (!existe) {
+    // ==========================================
+    // ➕ ADD VIP
+    // ==========================================
+
+    if (!existeVIP) {
 
       vips.push({
 
@@ -144,24 +272,78 @@ router.post("/add-vip", (req, res) => {
 
         criadoEm:
           new Date()
+
       });
 
-      fs.writeFileSync(
+      salvarJSON(
         caminhoVIP,
-        JSON.stringify(
-          vips,
-          null,
-          2
-        )
+        vips
       );
     }
+
+    // ==========================================
+    // 👤 USER UPDATE
+    // ==========================================
+
+    const user =
+      users.find(
+
+        u =>
+
+          u.email.toLowerCase() ===
+          email.toLowerCase()
+      );
+
+    if (user) {
+
+      user.plano = "VIP";
+
+      user.status = "online";
+
+      user.ultimoAcesso =
+        "Agora";
+
+    } else {
+
+      users.push({
+
+        email,
+
+        plano: "VIP",
+
+        status: "online",
+
+        ultimoAcesso:
+          "Agora",
+
+        criadoEm:
+          new Date()
+
+      });
+    }
+
+    // ==========================================
+    // 💾 SAVE USERS
+    // ==========================================
+
+    salvarJSON(
+      caminhoUsers,
+      users
+    );
+
+    // ==========================================
+    // ✅ SUCCESS
+    // ==========================================
 
     return res.json({
 
       sucesso: true,
 
-      total:
-        vips.length
+      totalVIP:
+        vips.length,
+
+      totalUsers:
+        users.length
     });
 
   } catch (e) {

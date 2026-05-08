@@ -1,5 +1,9 @@
 const cron = require("node-cron");
 
+const fs = require("fs");
+
+const path = require("path");
+
 const { buscarJogos } = require("./services/apiFootball");
 const { buscarStatsTime } = require("./services/statsService");
 const { buscarOddsPorJogo } = require("./services/oddsService");
@@ -8,6 +12,79 @@ const { gerarTopApostas } = require("./services/rankingService");
 const { enviarMensagem } = require("./services/telegramService");
 const { formatarTop } = require("./services/formatService");
 const { salvarApostas } = require("./services/historicoService");
+
+// ======================
+// 📂 LOGS
+// ======================
+
+const caminhoLogs = path.join(
+  __dirname,
+  "./database/logs.json"
+);
+
+// ======================
+// 🔥 HELPERS
+// ======================
+
+function criarArquivoLogs() {
+
+  if (!fs.existsSync(caminhoLogs)) {
+
+    fs.writeFileSync(
+      caminhoLogs,
+      JSON.stringify([], null, 2)
+    );
+  }
+}
+
+function salvarLog(tipo, mensagem) {
+
+  try {
+
+    criarArquivoLogs();
+
+    const logs = JSON.parse(
+
+      fs.readFileSync(
+        caminhoLogs,
+        "utf-8"
+      )
+    );
+
+    logs.push({
+
+      tipo,
+
+      mensagem,
+
+      data:
+        new Date()
+
+    });
+
+    // 🔥 evita crescer infinito
+    const limite =
+      logs.slice(-500);
+
+    fs.writeFileSync(
+
+      caminhoLogs,
+
+      JSON.stringify(
+        limite,
+        null,
+        2
+      )
+    );
+
+  } catch (e) {
+
+    console.log(
+      "❌ erro log:",
+      e.message
+    );
+  }
+}
 
 // ======================
 // 🔐 CONTROLE GLOBAL
@@ -27,107 +104,151 @@ let jogosEnviados = [];
 // ======================
 
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+
+  return new Promise(resolve =>
+
+    setTimeout(resolve, ms)
+  );
 }
 
 // ======================
 // 🧠 HORÁRIOS ESTRATÉGICOS
 // ======================
-//
-// 09h
-// 12h
-// 15h
-// 18h
-// 21h
-//
-// reduz MUITO requisição
-//
 
-cron.schedule("0 9,12,15,18,21 * * *", async () => {
+cron.schedule(
+  "0 9,12,15,18,21 * * *",
 
-  // ======================
-  // ⏸️ PAUSA GLOBAL
-  // ======================
-
-  if (pausaAte && Date.now() < pausaAte) {
-
-    console.log(
-      "⏸️ Sistema pausado para evitar bloqueio..."
-    );
-
-    return;
-  }
-
-  // ======================
-  // 🔄 EVITA LOOP
-  // ======================
-
-  if (rodando) {
-
-    console.log(
-      "⏳ Já está rodando..."
-    );
-
-    return;
-  }
-
-  // ======================
-  // 🌙 HORÁRIO INTELIGENTE
-  // ======================
-
-  const hora = new Date().getHours();
-
-  if (hora < 9 || hora > 23) {
-
-    console.log(
-      "🌙 Fora do horário inteligente"
-    );
-
-    return;
-  }
-
-  rodando = true;
-
-  console.log(
-    `🚀 IA iniciando análise (${hora}h)`
-  );
-
-  try {
+  async () => {
 
     // ======================
-    // 🎮 BUSCAR JOGOS
+    // ⏸️ PAUSA GLOBAL
     // ======================
 
-    const jogos = await buscarJogos();
+    if (
 
-    console.log(
-      "🎮 Jogos encontrados:",
-      jogos?.length || 0
-    );
+      pausaAte &&
 
-    // ======================
-    // ❌ SEM JOGOS
-    // ======================
-
-    if (!jogos || jogos.length === 0) {
+      Date.now() < pausaAte
+    ) {
 
       console.log(
-        "⚠️ Nenhum jogo encontrado"
+        "⏸️ Sistema pausado"
       );
 
-      // 🔥 pausa 6h
-      pausaAte =
-        Date.now() + (6 * 60 * 60 * 1000);
+      salvarLog(
+        "PAUSE",
+        "Sistema pausado por proteção anti-ban"
+      );
 
-      // 🔥 evita spam telegram
-      const agora = Date.now();
+      return;
+    }
+
+    // ======================
+    // 🔄 EVITA LOOP
+    // ======================
+
+    if (rodando) {
+
+      console.log(
+        "⏳ Já está rodando..."
+      );
+
+      salvarLog(
+        "LOOP",
+        "Cron já estava rodando"
+      );
+
+      return;
+    }
+
+    // ======================
+    // 🌙 HORÁRIO INTELIGENTE
+    // ======================
+
+    const hora =
+      new Date().getHours();
+
+    if (hora < 9 || hora > 23) {
+
+      console.log(
+        "🌙 Fora do horário"
+      );
+
+      salvarLog(
+        "SMART_TIME",
+        "Execução bloqueada por horário inteligente"
+      );
+
+      return;
+    }
+
+    rodando = true;
+
+    console.log(
+      `🚀 IA iniciando análise (${hora}h)`
+    );
+
+    salvarLog(
+      "START",
+      `IA iniciou análise ${hora}h`
+    );
+
+    try {
+
+      // ======================
+      // 🎮 BUSCAR JOGOS
+      // ======================
+
+      const jogos =
+        await buscarJogos();
+
+      console.log(
+        "🎮 Jogos encontrados:",
+        jogos?.length || 0
+      );
+
+      salvarLog(
+        "JOGOS",
+        `Jogos encontrados: ${jogos?.length || 0}`
+      );
+
+      // ======================
+      // ❌ SEM JOGOS
+      // ======================
 
       if (
-        !ultimaNotificacaoVazia ||
-        agora - ultimaNotificacaoVazia > 21600000
+
+        !jogos ||
+
+        jogos.length === 0
       ) {
 
-        await enviarMensagem(
+        console.log(
+          "⚠️ Nenhum jogo encontrado"
+        );
+
+        salvarLog(
+          "EMPTY",
+          "Nenhum jogo encontrado"
+        );
+
+        pausaAte =
+          Date.now() + (6 * 60 * 60 * 1000);
+
+        const agora =
+          Date.now();
+
+        if (
+
+          !ultimaNotificacaoVazia ||
+
+          agora -
+          ultimaNotificacaoVazia >
+
+          21600000
+        ) {
+
+          await enviarMensagem(
 `
 🤖 <b>Betnox AI</b>
 
@@ -135,231 +256,294 @@ cron.schedule("0 9,12,15,18,21 * * *", async () => {
 
 📊 A IA continua monitorando os jogos automaticamente.
 `,
-          process.env.CHAT_ID_FREE
-        );
-
-        ultimaNotificacaoVazia = agora;
-      }
-
-      rodando = false;
-
-      return;
-    }
-
-    // ======================
-    // 📊 ANALISAR
-    // ======================
-
-    const analisados = [];
-
-    for (const jogo of jogos) {
-
-      try {
-
-        // 🔥 delay anti-ban
-        await delay(3000);
-
-        // 🔥 evita repetir jogo
-        if (
-          jogosEnviados.includes(
-            jogo.fixtureId
-          )
-        ) {
-
-          console.log(
-            "🔁 Jogo já enviado:",
-            jogo.fixtureId
+            process.env.CHAT_ID_FREE
           );
 
-          continue;
+          ultimaNotificacaoVazia =
+            agora;
         }
 
-        const statsCasa =
-          await buscarStatsTime(
-            jogo.teamIdCasa
-          );
+        rodando = false;
 
-        // 🔥 delay extra
-        await delay(1500);
+        return;
+      }
 
-        const statsFora =
-          await buscarStatsTime(
-            jogo.teamIdFora
-          );
+      // ======================
+      // 📊 ANALISAR
+      // ======================
 
-        // 🔥 odds opcionais
-        let odds = null;
+      const analisados = [];
+
+      for (const jogo of jogos) {
 
         try {
 
-          await delay(1500);
+          await delay(3000);
 
-          odds =
-            await buscarOddsPorJogo(
+          // ======================
+          // 🔁 DUPLICADO
+          // ======================
+
+          if (
+
+            jogosEnviados.includes(
+              jogo.fixtureId
+            )
+          ) {
+
+            console.log(
+              "🔁 Jogo repetido:",
               jogo.fixtureId
             );
 
-        } catch {
+            salvarLog(
+              "DUPLICATE",
+              `Jogo repetido ${jogo.fixtureId}`
+            );
+
+            continue;
+          }
+
+          const statsCasa =
+            await buscarStatsTime(
+              jogo.teamIdCasa
+            );
+
+          await delay(1500);
+
+          const statsFora =
+            await buscarStatsTime(
+              jogo.teamIdFora
+            );
+
+          let odds = null;
+
+          try {
+
+            await delay(1500);
+
+            odds =
+              await buscarOddsPorJogo(
+                jogo.fixtureId
+              );
+
+          } catch {
+
+            console.log(
+              "⚠️ Odds indisponíveis"
+            );
+
+            salvarLog(
+              "ODDS",
+              `Odds indisponíveis ${jogo.fixtureId}`
+            );
+          }
+
+          const statsCasaSafe =
+            statsCasa || {
+              golsMarcados: 1,
+              golsSofridos: 1,
+              jogos: 1
+            };
+
+          const statsForaSafe =
+            statsFora || {
+              golsMarcados: 1,
+              golsSofridos: 1,
+              jogos: 1
+            };
+
+          const analise =
+            analisarJogoComStats(
+
+              {
+                ...jogo,
+
+                odd:
+                  odds?.casa || 2.0
+              },
+
+              statsCasaSafe,
+              statsForaSafe
+            );
+
+          analisados.push(
+            analise
+          );
+
+        } catch (e) {
 
           console.log(
-            "⚠️ Odds indisponíveis"
+            "❌ Erro jogo:",
+            e.message
+          );
+
+          salvarLog(
+            "GAME_ERROR",
+            e.message
           );
         }
+      }
 
-        const statsCasaSafe =
-          statsCasa || {
-            golsMarcados: 1,
-            golsSofridos: 1,
-            jogos: 1
-          };
+      console.log(
+        "📊 Total analisados:",
+        analisados.length
+      );
 
-        const statsForaSafe =
-          statsFora || {
-            golsMarcados: 1,
-            golsSofridos: 1,
-            jogos: 1
-          };
+      salvarLog(
+        "ANALISE",
+        `Total analisados: ${analisados.length}`
+      );
 
-        const analise =
-          analisarJogoComStats(
-            {
-              ...jogo,
+      // ======================
+      // 🏆 TOP
+      // ======================
 
-              odd:
-                odds?.casa || 2.0
-            },
+      const top =
+        gerarTopApostas(
+          analisados
+        );
 
-            statsCasaSafe,
-            statsForaSafe
-          );
+      salvarApostas(top);
 
-        analisados.push(analise);
+      // ======================
+      // ❌ SEM TOP
+      // ======================
 
-      } catch (e) {
+      if (
+
+        !top ||
+
+        top.length === 0
+      ) {
 
         console.log(
-          "❌ Erro jogo:",
-          e.message
+          "⚠️ Nenhuma aposta EV+"
         );
+
+        salvarLog(
+          "NO_EV",
+          "Nenhuma aposta EV positiva"
+        );
+
+        rodando = false;
+
+        return;
       }
-    }
 
-    console.log(
-      "📊 Total analisados:",
-      analisados.length
-    );
+      // ======================
+      // 🔥 MARCAR ENVIADOS
+      // ======================
 
-    // ======================
-    // 🏆 TOP APOSTAS
-    // ======================
+      top.forEach(j => {
 
-    const top =
-      gerarTopApostas(analisados);
+        jogosEnviados.push(
+          j.fixtureId
+        );
+      });
 
-    salvarApostas(top);
+      if (
+        jogosEnviados.length > 100
+      ) {
 
-    // ======================
-    // ❌ SEM TOP
-    // ======================
+        jogosEnviados =
+          jogosEnviados.slice(-50);
+      }
 
-    if (!top || top.length === 0) {
+      // ======================
+      // 💰 FREE vs VIP
+      // ======================
+
+      const free = [top[0]];
+
+      const vip = top;
+
+      const msgFree =
+        formatarTop(free);
+
+      const msgVip =
+        formatarTop(vip);
+
+      // ======================
+      // 📩 FREE
+      // ======================
+
+      await enviarMensagem(
+        msgFree,
+        process.env.CHAT_ID_FREE
+      );
 
       console.log(
-        "⚠️ Nenhuma aposta com EV positivo"
+        "📩 FREE enviado"
       );
 
-      rodando = false;
-
-      return;
-    }
-
-    // ======================
-    // 🔥 MARCAR ENVIADOS
-    // ======================
-
-    top.forEach(j => {
-
-      jogosEnviados.push(
-        j.fixtureId
+      salvarLog(
+        "FREE",
+        "Mensagem FREE enviada"
       );
-    });
 
-    // 🔥 limpa memória
-    if (jogosEnviados.length > 100) {
+      await delay(5000);
 
-      jogosEnviados =
-        jogosEnviados.slice(-50);
-    }
+      // ======================
+      // 💎 VIP
+      // ======================
 
-    // ======================
-    // 💰 FREE vs VIP
-    // ======================
-
-    const free = [top[0]];
-
-    const vip = top;
-
-    const msgFree =
-      formatarTop(free);
-
-    const msgVip =
-      formatarTop(vip);
-
-    // ======================
-    // 📩 FREE
-    // ======================
-
-    await enviarMensagem(
-      msgFree,
-      process.env.CHAT_ID_FREE
-    );
-
-    console.log(
-      "📩 FREE enviado"
-    );
-
-    // 🔥 delay
-    await delay(5000);
-
-    // ======================
-    // 💎 VIP
-    // ======================
-
-    await enviarMensagem(
-      msgVip,
-      process.env.CHAT_ID_VIP
-    );
-
-    console.log(
-      "💎 VIP enviado"
-    );
-
-    ultimaNotificacaoVazia = null;
-
-  } catch (e) {
-
-    // ======================
-    // 🚫 RATE LIMIT
-    // ======================
-
-    if (
-      e.message === "RATE_LIMIT"
-    ) {
+      await enviarMensagem(
+        msgVip,
+        process.env.CHAT_ID_VIP
+      );
 
       console.log(
-        "🚫 RATE LIMIT DETECTADO"
+        "💎 VIP enviado"
       );
 
-      // 🔥 pausa 12h
-      pausaAte =
-        Date.now() + (12 * 60 * 60 * 1000);
+      salvarLog(
+        "VIP",
+        "Mensagem VIP enviada"
+      );
+
+      ultimaNotificacaoVazia =
+        null;
+
+    } catch (e) {
+
+      // ======================
+      // 🚫 RATE LIMIT
+      // ======================
+
+      if (
+        e.message === "RATE_LIMIT"
+      ) {
+
+        console.log(
+          "🚫 RATE LIMIT"
+        );
+
+        salvarLog(
+          "RATE_LIMIT",
+          "Sistema pausado 12h"
+        );
+
+        pausaAte =
+          Date.now() + (12 * 60 * 60 * 1000);
+      }
+
+      console.log(
+        "🔥 Erro geral:",
+        e.message
+      );
+
+      salvarLog(
+        "ERROR",
+        e.message
+      );
     }
 
-    console.log(
-      "🔥 Erro geral:",
-      e.message
+    rodando = false;
+
+    salvarLog(
+      "FINISH",
+      "Execução finalizada"
     );
   }
-
-  rodando = false;
-});
+);
