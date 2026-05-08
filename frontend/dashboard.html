@@ -1,62 +1,228 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Betnox AI</title>
 
-  <link rel="stylesheet" href="styles/main.css">
+  <link
+    rel="stylesheet"
+    href="styles/main.css"
+  >
+
 </head>
 
 <body>
 
+  <!-- ======================
+  🔥 HEADER
+  ====================== -->
+
+  <header class="topbar">
+
+    <div>
+
+      <h1>
+        🤖 Betnox AI
+      </h1>
+
+      <p class="subtitle">
+        Inteligência esportiva automatizada
+      </p>
+
+    </div>
+
+    <div class="status-online">
+
+      <span class="dot"></span>
+
+      IA ONLINE
+
+    </div>
+
+  </header>
+
+  <!-- ======================
+  🚀 CONTAINER
+  ====================== -->
+
   <div class="container">
 
-    <h1>🤖 Betnox AI</h1>
+    <!-- ======================
+    💎 HERO PREMIUM
+    ====================== -->
 
-    <!-- 🔐 BANNER VIP -->
-    <div class="card vip-banner">
-      <h2>🔒 Área Premium</h2>
-      <p>Desbloqueie todas as apostas + gestão profissional + alertas VIP</p>
+    <div class="hero-card">
 
-      <div class="info">
-        <span>📈 ROI positivo</span>
-        <span>💰 Gestão de banca</span>
-        <span>🧠 IA avançada</span>
+      <div class="hero-glow"></div>
+
+      <div class="hero-content">
+
+        <div>
+
+          <div class="badge-premium">
+            🚀 PREMIUM ACCESS
+          </div>
+
+          <h2>
+            Plataforma profissional
+            de análise esportiva com IA
+          </h2>
+
+          <p>
+
+            Odds inteligentes,
+            value bets automatizadas,
+            gestão de banca
+            e monitoramento avançado.
+
+          </p>
+
+        </div>
+
+        <div class="hero-buttons">
+
+          <button
+            class="btn-vip"
+            onclick="irParaPagamento()"
+          >
+            💰 Tornar-se VIP
+          </button>
+
+        </div>
+
       </div>
 
-      <button class="btn-vip" onclick="irParaPagamento()">
-        💰 Tornar-se VIP
-      </button>
     </div>
 
-    <!-- STATS -->
+    <!-- ======================
+    📊 MÉTRICAS
+    ====================== -->
+
+    <div class="metrics-grid">
+
+      <div class="metric-card">
+
+        <h3>87%</h3>
+
+        <p>Winrate IA</p>
+
+      </div>
+
+      <div class="metric-card">
+
+        <h3>+500</h3>
+
+        <p>Análises</p>
+
+      </div>
+
+      <div class="metric-card">
+
+        <h3>24h</h3>
+
+        <p>Monitoramento</p>
+
+      </div>
+
+      <div class="metric-card">
+
+        <h3>ROI+</h3>
+
+        <p>Gestão Premium</p>
+
+      </div>
+
+    </div>
+
+    <!-- ======================
+    📊 STATS
+    ====================== -->
+
     <div id="stats"></div>
 
-    <!-- GRÁFICO LUCRO -->
-    <div class="card">
-      <h3>📊 Lucro acumulado</h3>
-      <canvas id="graficoLucro" height="100"></canvas>
+    <!-- ======================
+    📈 GRÁFICOS
+    ====================== -->
+
+    <div class="charts-grid">
+
+      <!-- lucro -->
+
+      <div class="card">
+
+        <h3>
+          📊 Lucro acumulado
+        </h3>
+
+        <canvas
+          id="graficoLucro"
+          height="100"
+        ></canvas>
+
+      </div>
+
+      <!-- banca -->
+
+      <div class="card">
+
+        <h3>
+          📈 Crescimento da banca
+        </h3>
+
+        <canvas
+          id="graficoBanca"
+        ></canvas>
+
+      </div>
+
     </div>
 
-    <!-- GRÁFICO BANCA -->
-    <div class="card">
-      <h3>📈 Crescimento da banca</h3>
-      <canvas id="graficoBanca"></canvas>
+    <!-- ======================
+    🔥 APOSTAS
+    ====================== -->
+
+    <div class="section-header">
+
+      <h2>
+        🔥 Oportunidades do dia
+      </h2>
+
+      <div class="mini-status">
+
+        Atualização automática
+
+      </div>
+
     </div>
 
-    <!-- LISTA -->
-    <h2>🔥 Apostas do dia</h2>
     <div id="lista"></div>
 
   </div>
 
+  <!-- ======================
+  🚀 SCRIPTS
+  ====================== -->
+
   <script>
+
     function irParaPagamento() {
-      window.location.href = "checkout.html"; // 🔥 próxima etapa
+
+      window.location.href =
+        "checkout.html";
     }
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <script src="scripts/app.js"></script>
 
 </body>
