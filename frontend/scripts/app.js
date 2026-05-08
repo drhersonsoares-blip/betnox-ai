@@ -19,16 +19,50 @@ window.onload = async function () {
 
   mostrarLoading();
 
+  // ======================
+  // 🔐 VERIFICA LOGIN
+  // ======================
+
+  if (!emailUsuario) {
+
+    window.location.href =
+      "login/login.html";
+
+    return;
+  }
+
   // 🔥 verifica VIP
   await verificarVIP();
 
+  // ======================
+  // ❌ NÃO VIP
+  // ======================
+
+  if (!usuarioVIP) {
+
+    window.location.href =
+      "checkout.html";
+
+    return;
+  }
+
+  // ======================
+  // ✅ VIP LIBERADO
+  // ======================
+
   carregarBanca();
+
   carregarGrafico();
+
   carregarStats();
+
   carregarTop();
 
   // 🔄 atualização automática
-  setInterval(carregarTop, 15000);
+  setInterval(
+    carregarTop,
+    15000
+  );
 };
 
 // ======================
@@ -132,22 +166,12 @@ async function carregarTop() {
       return;
     }
 
-    // ======================
-    // 🔥 FREE vs VIP
-    // ======================
-
-    const apostasVisiveis =
-      usuarioVIP
-        ? dados
-        : dados.slice(0, 1);
-
-    apostasVisiveis.forEach((jogo, index) => {
+    dados.forEach((jogo, index) => {
 
       const div = document.createElement("div");
 
       div.className = "card";
 
-      // 🔥 brilho baseado confiança
       let glow = "#334155";
 
       if (parseFloat(jogo.evCasa) > 0.25) {
@@ -243,91 +267,6 @@ async function carregarTop() {
       lista.appendChild(div);
     });
 
-    // ======================
-    // 🔒 BLOQUEIO VIP
-    // ======================
-
-    if (!usuarioVIP && dados.length > 1) {
-
-      const bloqueio = document.createElement("div");
-
-      bloqueio.className = "card";
-
-      bloqueio.style.border =
-        "1px solid #22c55e";
-
-      bloqueio.innerHTML = `
-
-        <div style="text-align:center">
-
-          <h2 style="
-            color:#22c55e;
-            margin-bottom:10px;
-          ">
-            🔐 Área Premium
-          </h2>
-
-          <p style="
-            color:#cbd5f5;
-            line-height:1.6;
-          ">
-
-            Desbloqueie todas as análises,
-            gestão profissional,
-            métricas avançadas
-            e oportunidades premium.
-
-          </p>
-
-          <button
-            onclick="irParaPagamento()"
-            class="btn-green"
-            style="margin-top:20px"
-          >
-            🚀 Tornar-se VIP
-          </button>
-
-          <div style="
-            margin-top:25px;
-          ">
-
-            <p style="
-              color:#94a3b8;
-              margin-bottom:10px;
-            ">
-              Já assinou?
-            </p>
-
-            <input
-              id="emailVIP"
-              type="email"
-              placeholder="Digite seu email Hotmart"
-              style="
-                padding:12px;
-                width:80%;
-                border-radius:10px;
-                border:none;
-                margin-bottom:10px;
-              "
-            />
-
-            <br>
-
-            <button
-              onclick="entrarVIP()"
-              class="btn-dark"
-            >
-              🔐 Entrar no VIP
-            </button>
-
-          </div>
-
-        </div>
-      `;
-
-      lista.appendChild(bloqueio);
-    }
-
   } catch (e) {
 
     console.log("Erro:", e);
@@ -345,54 +284,6 @@ async function carregarTop() {
 
       </div>
     `;
-  }
-}
-
-// ======================
-// 🔐 LOGIN VIP
-// ======================
-
-async function entrarVIP() {
-
-  const email =
-    document.getElementById("emailVIP").value;
-
-  if (!email) {
-
-    alert("Digite seu email");
-
-    return;
-  }
-
-  try {
-
-    localStorage.setItem(
-      "email",
-      email
-    );
-
-    emailUsuario = email;
-
-    await verificarVIP();
-
-    if (usuarioVIP) {
-
-      alert("✅ VIP liberado!");
-
-      location.reload();
-
-    } else {
-
-      alert(
-        "❌ Email não encontrado como VIP"
-      );
-    }
-
-  } catch (e) {
-
-    console.log(e);
-
-    alert("Erro ao validar VIP");
   }
 }
 
@@ -564,4 +455,22 @@ async function carregarBanca() {
       }]
     }
   });
+}
+
+// ======================
+// 🔓 LOGOUT
+// ======================
+
+function logout() {
+
+  localStorage.removeItem(
+    "vip"
+  );
+
+  localStorage.removeItem(
+    "email"
+  );
+
+  window.location.href =
+    "login/login.html";
 }

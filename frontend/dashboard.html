@@ -39,11 +39,47 @@
 
     </div>
 
-    <div class="status-online">
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:15px;
+      flex-wrap:wrap;
+    ">
 
-      <span class="dot"></span>
+      <!-- STATUS -->
 
-      IA ONLINE
+      <div class="status-online">
+
+        <span class="dot"></span>
+
+        IA ONLINE
+
+      </div>
+
+      <!-- EMAIL -->
+
+      <div
+        id="usuarioLogado"
+        style="
+          color:#cbd5f5;
+          font-size:14px;
+          background:#1e293b;
+          padding:10px 14px;
+          border-radius:999px;
+          border:1px solid rgba(255,255,255,0.05);
+        "
+      >
+        🔐 VIP
+      </div>
+
+      <!-- LOGOUT -->
+
+      <button
+        onclick="logout()"
+        class="btn-dark"
+      >
+        🚪 Sair
+      </button>
 
     </div>
 
@@ -93,7 +129,7 @@
             class="btn-vip"
             onclick="irParaPagamento()"
           >
-            💰 Tornar-se VIP
+            💰 Área Premium
           </button>
 
         </div>
@@ -217,6 +253,22 @@
 
       window.location.href =
         "checkout.html";
+    }
+
+    // 🔥 MOSTRA EMAIL
+
+    const email =
+      localStorage.getItem("email");
+
+    if (email) {
+
+      const box =
+        document.getElementById(
+          "usuarioLogado"
+        );
+
+      box.innerHTML =
+        `💎 ${email}`;
     }
 
   </script>
