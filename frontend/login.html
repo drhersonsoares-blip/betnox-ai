@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Login | Betnox AI</title>
+
+  <link
+    rel="stylesheet"
+    href="../styles/main.css"
+  >
+
+  <style>
+
+    body {
+
+      min-height: 100vh;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      padding: 20px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #0f172a,
+          #020617
+        );
+    }
+
+    .login-box {
+
+      position: relative;
+
+      overflow: hidden;
+
+      width: 100%;
+
+      max-width: 420px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #111827,
+          #1e293b
+        );
+
+      border-radius: 24px;
+
+      padding: 40px;
+
+      border:
+        1px solid rgba(34,197,94,0.15);
+
+      box-shadow:
+        0 0 50px rgba(34,197,94,0.08);
+    }
+
+    .login-glow {
+
+      position: absolute;
+
+      width: 250px;
+      height: 250px;
+
+      background: #22c55e;
+
+      filter: blur(120px);
+
+      opacity: 0.12;
+
+      top: -120px;
+      right: -100px;
+    }
+
+    .login-content {
+
+      position: relative;
+
+      z-index: 2;
+    }
+
+    .badge-login {
+
+      display: inline-block;
+
+      padding: 10px 16px;
+
+      border-radius: 999px;
+
+      background:
+        linear-gradient(
+          45deg,
+          #22c55e,
+          #4ade80
+        );
+
+      color: #000;
+
+      font-size: 12px;
+
+      font-weight: bold;
+
+      margin-bottom: 20px;
+    }
+
+    h1 {
+
+      font-size: 38px;
+
+      margin-bottom: 15px;
+    }
+
+    .desc {
+
+      color: #cbd5f5;
+
+      line-height: 1.7;
+
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+
+      margin-bottom: 20px;
+    }
+
+    label {
+
+      display: block;
+
+      margin-bottom: 10px;
+
+      color: #cbd5f5;
+
+      font-size: 14px;
+    }
+
+    input {
+
+      width: 100%;
+
+      padding: 16px;
+
+      border-radius: 14px;
+
+      border:
+        1px solid rgba(255,255,255,0.08);
+
+      background: #0f172a;
+
+      color: #fff;
+
+      outline: none;
+
+      font-size: 15px;
+    }
+
+    input:focus {
+
+      border-color: #22c55e;
+    }
+
+    .btn-login {
+
+      width: 100%;
+
+      border: none;
+
+      padding: 16px;
+
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          45deg,
+          #22c55e,
+          #4ade80
+        );
+
+      color: #000;
+
+      font-weight: bold;
+
+      font-size: 16px;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .btn-login:hover {
+
+      transform: translateY(-2px);
+    }
+
+    .msg {
+
+      margin-top: 20px;
+
+      text-align: center;
+
+      color: #f87171;
+
+      min-height: 20px;
+
+      font-size: 14px;
+    }
+
+    .footer {
+
+      margin-top: 25px;
+
+      text-align: center;
+
+      color: #64748b;
+
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <div class="login-glow"></div>
+
+    <div class="login-content">
+
+      <div class="badge-login">
+        🔐 ACESSO VIP
+      </div>
+
+      <h1>
+        Entrar
+      </h1>
+
+      <div class="desc">
+
+        Acesse a plataforma premium
+        Betnox AI e desbloqueie
+        análises avançadas,
+        value bets e monitoramento inteligente.
+
+      </div>
+
+      <div class="input-group">
+
+        <label>
+          Seu email
+        </label>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="voce@email.com"
+        >
+
+      </div>
+
+      <button
+        class="btn-login"
+        onclick="fazerLogin()"
+      >
+        🚀 Entrar na plataforma
+      </button>
+
+      <div
+        class="msg"
+        id="msg"
+      ></div>
+
+      <div class="footer">
+
+        Seu acesso VIP é liberado
+        automaticamente após confirmação
+        do pagamento via Hotmart.
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="login.js"></script>
+
+</body>
+</html>
