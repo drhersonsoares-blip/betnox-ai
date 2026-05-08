@@ -234,4 +234,61 @@ router.get(
   }
 );
 
+// =====================================================
+// 📜 LOGS
+// =====================================================
+
+router.get(
+  "/logs",
+  adminMiddleware,
+  (req, res) => {
+
+    try {
+
+      const logsPath = path.join(
+        __dirname,
+        "../database/logs.json"
+      );
+
+      // 🔥 cria arquivo
+      if (
+        !fs.existsSync(logsPath)
+      ) {
+
+        fs.writeFileSync(
+          logsPath,
+          JSON.stringify([], null, 2)
+        );
+      }
+
+      const logs = JSON.parse(
+
+        fs.readFileSync(
+          logsPath,
+          "utf-8"
+        )
+      );
+
+      // 🔥 últimos primeiro
+      const invertido =
+        logs.reverse();
+
+      res.json(invertido);
+
+    } catch (e) {
+
+      console.log(
+        "❌ erro logs:",
+        e.message
+      );
+
+      res.status(500).json({
+
+        erro:
+          "Erro logs"
+      });
+    }
+  }
+);
+
 module.exports = router;

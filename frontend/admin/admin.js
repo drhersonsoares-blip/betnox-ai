@@ -31,6 +31,28 @@ if (!adminEmail) {
 }
 
 // ==========================================
+// 🔓 LOGOUT
+// ==========================================
+
+function logout() {
+
+  localStorage.removeItem(
+    "vip"
+  );
+
+  localStorage.removeItem(
+    "email"
+  );
+
+  localStorage.removeItem(
+    "admin"
+  );
+
+  window.location.href =
+    "../login/login.html";
+}
+
+// ==========================================
 // 📊 BUSCAR STATS
 // ==========================================
 
@@ -155,48 +177,54 @@ function criarGrafico(data) {
       "graficoAdmin"
     );
 
-  new Chart(ctx, {
+  // 🔥 evita duplicar gráfico
+  if (window.graficoAdminChart) {
 
-    type: "line",
+    window.graficoAdminChart.destroy();
+  }
 
-    data: {
+  window.graficoAdminChart =
+    new Chart(ctx, {
 
-      labels: [
-        "Usuários",
-        "VIPs",
-        "Sinais"
-      ],
+      type: "line",
 
-      datasets: [{
+      data: {
 
-        label: "BETNOX AI",
-
-        data: [
-
-          data.usuarios,
-          data.vips,
-          data.sinaisGerados
-
+        labels: [
+          "Usuários",
+          "VIPs",
+          "Sinais"
         ],
 
-        borderColor: "#22c55e",
+        datasets: [{
 
-        backgroundColor:
-          "rgba(34,197,94,0.2)",
+          label: "BETNOX AI",
 
-        tension: 0.4,
+          data: [
 
-        fill: true
+            data.usuarios,
+            data.vips,
+            data.sinaisGerados
 
-      }]
-    },
+          ],
 
-    options: {
+          borderColor: "#22c55e",
 
-      responsive: true
+          backgroundColor:
+            "rgba(34,197,94,0.2)",
 
-    }
-  });
+          tension: 0.4,
+
+          fill: true
+
+        }]
+      },
+
+      options: {
+
+        responsive: true
+      }
+    });
 }
 
 // ==========================================
@@ -244,7 +272,7 @@ async function carregarUsuarios() {
 
     tabela.innerHTML = "";
 
-    usuarios.forEach((user) => {
+    usuarios.reverse().forEach((user) => {
 
       tabela.innerHTML += `
 
@@ -263,7 +291,7 @@ async function carregarUsuarios() {
                 : ""}
             ">
 
-              ${user.status}
+              ${user.status || "offline"}
 
             </span>
 
@@ -277,14 +305,14 @@ async function carregarUsuarios() {
                 : "badge-status"}
             ">
 
-              ${user.plano}
+              ${user.plano || "FREE"}
 
             </span>
 
           </td>
 
           <td>
-            ${user.ultimoAcesso}
+            ${user.ultimoAcesso || "-"}
           </td>
 
         </tr>
@@ -302,9 +330,198 @@ async function carregarUsuarios() {
 }
 
 // ==========================================
+// 📜 CARREGAR LOGS
+// ==========================================
+
+async function carregarLogs() {
+
+  try {
+
+    const response = await fetch(
+
+      `${API_URL}/admin/logs`,
+
+      {
+
+        headers: {
+
+          email: adminEmail
+
+        }
+
+      }
+    );
+
+    // ==========================================
+    // ❌ NÃO AUTORIZADO
+    // ==========================================
+
+    if (
+      response.status === 401 ||
+      response.status === 403
+    ) {
+
+      return;
+    }
+
+    const logs =
+      await response.json();
+
+    const container =
+      document.getElementById(
+        "logsContainer"
+      );
+
+    // ==========================================
+    // 🔥 CLEAR
+    // ==========================================
+
+    container.innerHTML = "";
+
+    // ==========================================
+    // ❌ SEM LOGS
+    // ==========================================
+
+    if (!logs || logs.length === 0) {
+
+      container.innerHTML = `
+
+        <div class="log-line">
+
+          <span class="log-time">
+            agora
+          </span>
+
+          <span class="log-type warning">
+            EMPTY
+          </span>
+
+          <span class="log-message">
+            Nenhum log encontrado
+          </span>
+
+        </div>
+
+      `;
+
+      return;
+    }
+
+    // ==========================================
+    // 📜 RENDER
+    // ==========================================
+
+    logs.slice(0, 50).forEach(log => {
+
+      let classe = "info";
+
+      // ==========================================
+      // 🎨 CORES
+      // ==========================================
+
+      if (
+        log.tipo?.includes("ERROR")
+      ) {
+
+        classe = "error";
+      }
+
+      else if (
+
+        log.tipo?.includes("VIP") ||
+
+        log.tipo?.includes("SUCCESS") ||
+
+        log.tipo?.includes("START")
+      ) {
+
+        classe = "success";
+      }
+
+      else if (
+
+        log.tipo?.includes("RATE") ||
+
+        log.tipo?.includes("EMPTY") ||
+
+        log.tipo?.includes("WARNING")
+      ) {
+
+        classe = "warning";
+      }
+
+      // ==========================================
+      // 🕒 DATA
+      // ==========================================
+
+      const data =
+        new Date(
+          log.data
+        ).toLocaleString(
+          "pt-BR"
+        );
+
+      // ==========================================
+      // 🖥️ HTML
+      // ==========================================
+
+      container.innerHTML += `
+
+        <div class="log-line">
+
+          <span class="log-time">
+            ${data}
+          </span>
+
+          <span class="
+            log-type
+            ${classe}
+          ">
+
+            ${log.tipo}
+
+          </span>
+
+          <span class="log-message">
+
+            ${log.mensagem}
+
+          </span>
+
+        </div>
+
+      `;
+    });
+
+  } catch (error) {
+
+    console.log(
+      "❌ erro logs:",
+      error
+    );
+  }
+}
+
+// ==========================================
+// 🔄 AUTO UPDATE
+// ==========================================
+
+setInterval(() => {
+
+  carregarStats();
+
+  carregarUsuarios();
+
+  carregarLogs();
+
+}, 10000);
+
+// ==========================================
 // 🚀 INIT
 // ==========================================
 
 carregarStats();
 
 carregarUsuarios();
+
+carregarLogs();

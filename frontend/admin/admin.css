@@ -370,3 +370,114 @@
     min-width: 600px;
   }
 }
+
+/* =========================================
+📜 LOGS TERMINAL
+========================================= */
+
+.logs-terminal {
+
+  background: #020617;
+
+  border:
+    1px solid rgba(255,255,255,0.05);
+
+  border-radius: 20px;
+
+  padding: 20px;
+
+  margin-top: 20px;
+
+  max-height: 500px;
+
+  overflow-y: auto;
+
+  font-family: monospace;
+}
+
+/* LOG */
+
+.log-line {
+
+  display: flex;
+
+  gap: 15px;
+
+  align-items: center;
+
+  padding: 12px 0;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.03);
+
+  flex-wrap: wrap;
+}
+
+/* TIME */
+
+.log-time {
+
+  color: #64748b;
+
+  font-size: 12px;
+
+  min-width: 140px;
+}
+
+/* TYPE */
+
+.log-type {
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: bold;
+}
+
+/* CORES */
+
+.log-type.info {
+
+  background:
+    rgba(59,130,246,0.15);
+
+  color: #3b82f6;
+}
+
+.log-type.error {
+
+  background:
+    rgba(239,68,68,0.15);
+
+  color: #ef4444;
+}
+
+.log-type.success {
+
+  background:
+    rgba(34,197,94,0.15);
+
+  color: #22c55e;
+}
+
+.log-type.warning {
+
+  background:
+    rgba(245,158,11,0.15);
+
+  color: #f59e0b;
+}
+
+/* MESSAGE */
+
+.log-message {
+
+  color: #e2e8f0;
+
+  font-size: 13px;
+
+  flex: 1;
+}

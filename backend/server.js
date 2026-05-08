@@ -5,6 +5,10 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 
+// 🍃 MONGO
+const conectarMongo =
+  require("./config/mongo");
+
 const app = express();
 
 // =====================================================
@@ -56,7 +60,7 @@ function salvarLog(tipo, mensagem) {
 
     });
 
-    // 🔥 evita crescer infinito
+    // 🔥 limite logs
     const limite =
       logs.slice(-1000);
 
@@ -88,7 +92,7 @@ const appName =
   "BETNOX AI";
 
 const appVersion =
-  "2.0.0";
+  "3.0.0";
 
 const appStartTime =
   new Date();
@@ -96,6 +100,12 @@ const appStartTime =
 const appEnvironment =
   process.env.NODE_ENV ||
   "development";
+
+// =====================================================
+// 🍃 MONGODB
+// =====================================================
+
+conectarMongo();
 
 // =====================================================
 // 🚀 CONFIG
@@ -184,10 +194,10 @@ app.use(
 );
 
 // =====================================================
-// 🔐 VIP / AUTENTICAÇÃO
+// 🔐 VIP / AUTH
 // =====================================================
 
-// 🔥 webhook hotmart
+// 🔥 webhook
 const webhookRoutes =
   require("./routes/webhook");
 
@@ -206,10 +216,9 @@ app.use(
 );
 
 // =====================================================
-// 📊 ADMIN PREMIUM
+// 📊 ADMIN
 // =====================================================
 
-// 🚀 admin
 const adminRoutes =
   require("./routes/adminRoutes");
 
@@ -219,7 +228,7 @@ app.use(
 );
 
 // =====================================================
-// ❤️ HEALTH ENTERPRISE
+// ❤️ HEALTH ROOT
 // =====================================================
 
 app.get("/", (req, res) => {
@@ -245,6 +254,9 @@ app.get("/", (req, res) => {
 
     uptimeSegundos:
       process.uptime(),
+
+    mongodb:
+      "ativo",
 
     memoria: {
 
@@ -274,6 +286,8 @@ app.get("/health", (req, res) => {
     telegram: true,
 
     cron: true,
+
+    mongodb: true,
 
     environment:
       appEnvironment,
@@ -329,7 +343,7 @@ app.use((err, req, res, next) => {
 });
 
 // =====================================================
-// 🚀 SERVIDOR
+// 🚀 SERVER
 // =====================================================
 
 const PORT =
@@ -345,6 +359,7 @@ app.listen(PORT, () => {
 📊 Admin: /admin
 🔐 Auth: /auth
 ⚡ Ambiente: ${appEnvironment}
+🍃 MongoDB: conectado
 🚀 Versão: ${appVersion}
 ========================================
   `);
@@ -356,7 +371,7 @@ app.listen(PORT, () => {
 });
 
 // =====================================================
-// ⏰ CRON AUTOMÁTICO
+// ⏰ CRON
 // =====================================================
 
 require("./cron");

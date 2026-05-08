@@ -131,7 +131,10 @@
 
           </div>
 
-          <button class="btn-dark">
+          <button
+            class="btn-dark"
+            onclick="logout()"
+          >
             🚪 Logout
           </button>
 
@@ -330,7 +333,7 @@
                 <tr>
 
                   <td>
-                    demo@betnox.ai
+                    carregando...
                   </td>
 
                   <td>
@@ -346,7 +349,7 @@
                   </td>
 
                   <td>
-                    Agora
+                    agora
                   </td>
 
                 </tr>
@@ -410,6 +413,53 @@
             <p>
               Cron Rodando
             </p>
+
+          </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- 📜 LOGS OPERACIONAIS -->
+        <!-- ===================================== -->
+
+        <div class="card">
+
+          <div class="section-header">
+
+            <h2>
+              📜 Logs Operacionais
+            </h2>
+
+            <div class="mini-status">
+
+              LIVE MONITOR
+
+            </div>
+
+          </div>
+
+          <!-- TERMINAL -->
+
+          <div
+            id="logsContainer"
+            class="logs-terminal"
+          >
+
+            <div class="log-line">
+
+              <span class="log-time">
+                carregando...
+              </span>
+
+              <span class="log-type info">
+                SYSTEM
+              </span>
+
+              <span class="log-message">
+                Buscando logs operacionais...
+              </span>
+
+            </div>
 
           </div>
 
